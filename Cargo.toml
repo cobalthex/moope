@@ -1,0 +1,6 @@
+[package]
+name = "rustgame"
+version = "0.1.0"
+authors = ["CobaltHex <cobalthex@live.com>"]
+
+[dependencies]
