@@ -1,23 +1,24 @@
-mod object;
+mod instance;
 mod runtime;
+mod graphics;
+
 use std::time::Duration;
 
-struct TestLogic {}
-impl object::Logic for TestLogic
-{
-    fn name(&self) -> &'static str { return "TestLogic"; }
-    fn Think(&mut self, dt : &object::FrameTime) -> Duration
-    {
-        println!("{}", dt.total.as_millis());
-        return Duration::from_millis(10);
-    }
-}
 
-fn main() {
+fn main()
+{
     let mut runtime = runtime::Runtime::new();
-    runtime.AddLogic(Box::new(TestLogic {}));
+    runtime.add_logic(graphics::WindowLogic::new(&mut runtime));
+
+    let instance = runtime.new_instance();
+
+    let mut window = runtime.get_logic::<graphics::WindowLogic>().unwrap().new_window(instance, "Window", 800.0, 600.0);
 
     loop {
-        runtime.RunOnce();
+        match runtime.run_once()
+        {
+            runtime::ShouldExit::Yes => break,
+            _ => ()
+        }
     }
 }
